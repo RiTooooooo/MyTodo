@@ -75,9 +75,7 @@ export default function TodoPage(): React.ReactElement {
                   checked={todo.done}
                   onChange={() => void {}}
                 />
-                <span
-                  className={todo.done ? styles.itemTitleDone : styles.itemTitle}
-                >
+                <span className={todo.done ? styles.itemTitleDone : styles.itemTitle}>
                   {todo.title}
                 </span>
               </li>
