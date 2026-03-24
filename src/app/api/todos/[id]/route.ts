@@ -3,7 +3,7 @@ import { createRoute } from './frourio.server';
 
 export const { PATCH } = createRoute({
   // Todoの完了状態を更新する
-  patch: async ({ params,body }) => {
+  patch: async ({ params, body }) => {
     const todo = await prismaClient.todo.update({
       where: { id: params.id },
       data: { done: body.done },
@@ -16,5 +16,5 @@ export const { PATCH } = createRoute({
         createdAt: todo.createdAt.toISOString(),
       },
     };
-  }
+  },
 });

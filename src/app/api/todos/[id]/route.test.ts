@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { afterEach, expect, test } from 'vitest';
 import { prismaClient } from 'server/lib/prismaClient';
+import { afterEach, expect, test } from 'vitest';
 import { POST } from '../route';
 import { PATCH } from './route';
 
@@ -19,7 +19,7 @@ test('PATCH - doneをtrueに更新できる', async () => {
   expect(postRes.status).toBe(201);
 
   // ② POST のレスポンスを検証しつつ id を取得する
-  const created = await postRes.json() as { id: string };
+  const created = (await postRes.json()) as { id: string };
   const params = Promise.resolve({ id: created.id });
 
   // ③ doneをtrueに更新する
@@ -33,7 +33,5 @@ test('PATCH - doneをtrueに更新できる', async () => {
 
   // ④ 変数に代入せず直接検証する
   expect(res.status).toBe(200);
-  await expect(res.json()).resolves.toEqual(
-    expect.objectContaining({ done: true }),
-  );
+  await expect(res.json()).resolves.toEqual(expect.objectContaining({ done: true }));
 });
