@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { $fc as $fcTodoId } from '../api/todos/[id]/frourio.client';
 import { $fc } from '../api/todos/frourio.client';
 import styles from './page.module.css';
 
@@ -31,6 +32,12 @@ export default function TodoPage(): React.ReactElement {
     if (title === '') return;
     await $fc().$post({ body: { title } });
     setTitle('');
+    await fetchTodos();
+  }
+
+  // Todoの完了状態を更新する
+  async function toggleTodo(id: string, done: boolean): Promise<void> {
+    await $fcTodoId().$patch({ params: { id }, body: { done } });
     await fetchTodos();
   }
 
@@ -73,7 +80,7 @@ export default function TodoPage(): React.ReactElement {
                   className={styles.checkbox}
                   type="checkbox"
                   checked={todo.done}
-                  onChange={() => void {}}
+                  onChange={() => void toggleTodo(todo.id, !todo.done)}
                 />
                 <span className={todo.done ? styles.itemTitleDone : styles.itemTitle}>
                   {todo.title}
