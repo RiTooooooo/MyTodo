@@ -46,7 +46,7 @@ export default function TodoPage(): React.ReactElement {
       <div className={styles.inner}>
         {/* ヘッダー */}
         <div className={styles.header}>
-          <h1 className={styles.title}>📝 Todoリスト</h1>
+          <h1 className={styles.title}>Todoリスト</h1>
           <p className={styles.subtitle}>今日やることを管理しよう</p>
         </div>
 
