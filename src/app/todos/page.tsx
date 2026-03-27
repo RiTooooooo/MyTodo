@@ -41,6 +41,12 @@ export default function TodoPage(): React.ReactElement {
     await fetchTodos();
   }
 
+  // Todoを削除する
+  async function deleteTodo(id: string): Promise<void> {
+    await $fcTodoId().$delete({ params: { id } });
+    await fetchTodos();
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.inner}>
@@ -85,6 +91,13 @@ export default function TodoPage(): React.ReactElement {
                 <span className={todo.done ? styles.itemTitleDone : styles.itemTitle}>
                   {todo.title}
                 </span>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => void deleteTodo(todo.id)}
+                  aria-label="削除"
+                >
+                  ✕
+                </button>
               </li>
             ))}
           </ul>

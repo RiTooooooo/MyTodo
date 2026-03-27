@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { prismaClient } from 'server/lib/prismaClient';
 import { afterEach, expect, test } from 'vitest';
-import { POST } from '../route';
-import { PATCH } from './route';
+import { GET, POST } from '../route';
+import { DELETE, PATCH } from './route';
 
 afterEach(async () => {
   await prismaClient.todo.deleteMany();
@@ -34,4 +34,33 @@ test('PATCH - doneをtrueに更新できる', async () => {
   // ④ 変数に代入せず直接検証する
   expect(res.status).toBe(200);
   await expect(res.json()).resolves.toEqual(expect.objectContaining({ done: true }));
+});
+
+test('DELETE - Todoを削除できる', async () => {
+  // ① Todoを作成する
+  const postRes = await POST(
+    new NextRequest('http://localhost/api/todos', {
+      method: 'POST',
+      body: JSON.stringify({ title: '削除テスト' }),
+    }),
+  );
+  expect(postRes.status).toBe(201);
+
+  const created = (await postRes.json()) as { id: string };
+  const params = Promise.resolve({ id: created.id });
+
+  // ② 削除する
+  const res = await DELETE(
+    new NextRequest(`http://localhost/api/todos/${created.id}`, {
+      method: 'DELETE',
+    }),
+    { params },
+  );
+
+  expect(res.status).toBe(200);
+
+  // ③ 一覧から消えていることを確認する
+  const listRes = await GET(new NextRequest('http://localhost/api/todos', { method: 'GET' }));
+  const list = (await listRes.json()) as { id: string }[];
+  expect(list.find((t) => t.id === created.id)).toBeUndefined();
 });

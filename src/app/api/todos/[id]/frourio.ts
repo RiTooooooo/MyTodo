@@ -16,4 +16,10 @@ export const frourioSpec = {
       },
     },
   },
+  // Todo削除
+  delete: {
+    res: {
+      200: { body: z.object({}) },
+    },
+  },
 } satisfies FrourioSpec;
